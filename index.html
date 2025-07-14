@@ -1,4 +1,3 @@
-<!-- index.html - główny plik strony -->
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -87,6 +86,22 @@
             color: #667eea;
         }
         
+        /* Animowany underline przy hover */
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #667eea;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+        
         /* Language Switcher - elegancki przełącznik języka */
         .language-switcher {
             display: flex;
@@ -119,22 +134,6 @@
             background: #667eea;
             color: white;
             box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
-        }
-        
-        /* Animowany underline przy hover */
-        .nav-menu a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -5px;
-            left: 0;
-            background-color: #667eea;
-            transition: width 0.3s ease;
-        }
-        
-        .nav-menu a:hover::after {
-            width: 100%;
         }
         
         /* Hero Section - pierwsze wrażenie jest kluczowe */
@@ -985,7 +984,6 @@
             </p>
             
             <div class="contact-form">
-                <!-- Formularz zostanie obsłużony przez zewnętrzną usługę -->
                 <form id="contact-form" action="#" method="POST">
                     <div class="form-group">
                         <label for="name" data-i18n="contact.nameLabel">Imię i nazwisko</label>
@@ -1439,8 +1437,6 @@
             }
         }
 
-        // Reszta oryginalnego JavaScript...
-        
         // Obsługa smooth scrolling dla linków nawigacyjnych
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -1554,7 +1550,7 @@
             return emailRegex.test(email);
         }
 
-        // Animation on scroll usando Intersection Observer
+        // Animation on scroll using Intersection Observer
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -1608,141 +1604,6 @@
         // Keyboard navigation accessibility
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Tab') {
-                document.body.classList.add('keyboard-navigation');
-            }
-        });
-
-        document.addEventListener('mousedown', function() {
-            document.body.classList.remove('keyboard-navigation');
-        });
-    </script>
-        // Obsługa smooth scrolling dla linków nawigacyjnych
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    // Offset dla sticky header
-                    const headerHeight = document.querySelector('.header').offsetHeight;
-                    const targetPosition = target.offsetTop - headerHeight;
-                    
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
-        // Obsługa formularza kontaktowego
-        document.getElementById('contact-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Podstawowa walidacja
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const message = document.getElementById('message').value.trim();
-            
-            let isValid = true;
-            
-            // Sprawdzenie pól
-            if (!name) {
-                document.getElementById('name-help').style.display = 'block';
-                isValid = false;
-            } else {
-                document.getElementById('name-help').style.display = 'none';
-            }
-            
-            if (!email || !isValidEmail(email)) {
-                document.getElementById('email-help').style.display = 'block';
-                isValid = false;
-            } else {
-                document.getElementById('email-help').style.display = 'none';
-            }
-            
-            if (!message) {
-                document.getElementById('message-help').style.display = 'block';
-                isValid = false;
-            } else {
-                document.getElementById('message-help').style.display = 'none';
-            }
-            
-            if (isValid) {
-                // Tutaj można zintegrować z usługą przesyłania emaili
-                // Na razie symulujemy wysłanie
-                const submitButton = this.querySelector('button[type="submit"]');
-                const originalText = submitButton.textContent;
-                
-                submitButton.textContent = 'Wysyłanie...';
-                submitButton.disabled = true;
-                
-                // Symulacja wysyłania
-                setTimeout(() => {
-                    alert(`Dziękuję ${name}! Otrzymałem Twoją wiadomość i odezwę się w ciągu 24 godzin na adres ${email}.`);
-                    this.reset();
-                    submitButton.textContent = originalText;
-                    submitButton.disabled = false;
-                }, 1500);
-            }
-        });
-        
-        // Funkcja walidacji email
-        function isValidEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
-        }
-
-        // Animation on scroll usando Intersection Observer
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('fade-in');
-                    // Przestajemy obserwować element po animacji
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        // Obserwowanie elementów do animacji
-        document.addEventListener('DOMContentLoaded', function() {
-            const elementsToAnimate = document.querySelectorAll('.problem-card, .service-card, .case-study, .cert-badge');
-            elementsToAnimate.forEach(element => {
-                observer.observe(element);
-            });
-        });
-
-        // Dynamiczne ukrywanie/pokazywanie nawigacji
-        let lastScrollTop = 0;
-        const header = document.querySelector('.header');
-        
-        window.addEventListener('scroll', function() {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
-            if (scrollTop > lastScrollTop && scrollTop > 100) {
-                // Scrolling down - ukryj header
-                header.style.transform = 'translateY(-100%)';
-            } else {
-                // Scrolling up - pokaż header
-                header.style.transform = 'translateY(0)';
-            }
-            
-            lastScrollTop = scrollTop;
-        });
-
-        // Preloader dla lepszego UX (opcjonalne)
-        window.addEventListener('load', function() {
-            document.body.classList.add('loaded');
-        });
-
-        // Keyboard navigation accessibility
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Tab') {
-                // Dodaj visual focus indicator dla użytkowników klawiatury
                 document.body.classList.add('keyboard-navigation');
             }
         });
